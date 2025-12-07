@@ -13,6 +13,7 @@ struct Transaction {
     double Amount;
     date Date; 
 };
+
 struct StackNode {
     Transaction transaction;
     StackNode* next;

@@ -328,9 +328,6 @@ void DisplayMostRecentlyHiredEmployee(const EmployeeArray &employees)
     }
 }
 
-// this makes the account numbers unique by incrementing for each new account
-static unsigned int nextAccountNumber = 1;
-
 bool IsAlphabetic(const string &str)
 {
     for (char c : str)
