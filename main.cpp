@@ -152,17 +152,6 @@ void EmployeeMenu(CustomerList* &customers,
         {
             Employee e;
 
-            cout << "ID: ";
-            while (!(cin >> e.Id))
-            {
-                cin.clear();
-                cin.ignore(10000, '\n');
-                cout << "Invalid input! Please enter a valid ID: ";
-            }
-
-            // Clear leftover newline before getline
-            cin.ignore(numeric_limits<std::streamsize>::max(), '\n');
-
             cout << "Name: ";
             getline(cin, e.Name);
 
