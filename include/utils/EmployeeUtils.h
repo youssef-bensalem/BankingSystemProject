@@ -39,4 +39,8 @@ void DeclineLoanRequest(const LoanRequest& request);
 void AcceptLoanRequest(CustomerList* customers, const LoanRequest& request);
 void ManageLoanRequests(CustomerList* customers, LoanRequestQueue* queue);
 
+
+void finalizeAllAccounts(CustomerList* customers);
+
+void DisplayDayHistory(Account* acc);
 #endif // EMPLOYEEUTILS_H

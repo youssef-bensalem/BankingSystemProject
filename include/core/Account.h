@@ -10,6 +10,8 @@ using namespace std;
 #include "core/Transaction.h"
 #include "utils/Date.h"
 
+struct TransactionNode;
+
 struct Account {
 	unsigned int Account_number;// unique
 	string Account_type;

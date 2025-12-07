@@ -131,6 +131,8 @@ void EmployeeMenu(CustomerList *&customers,
         cout << "11. Manage Loan Requests (FIFO)\n";
         cout << "12. Display Employees Alphabetically\n";
         cout << "13. Display Employees by Branch\n";
+        cout << "14. Finalize the day for all accounts\n";
+        cout << "15. Display day history for an account\n";
         cout << "0. Back\nChoice: ";
 
         cin >> choice;
@@ -332,6 +334,18 @@ void StatisticsMenu(CustomerList *customers, const EmployeeArray &employees)
             break;
         case 9: /* ask branch */
             break;
+        case 14:
+            finalizeAllAccounts(customers);
+            break;
+        case 15:
+            {
+                unsigned int accnum; cout<<"Account number: "; cin>>accnum;
+                CustomerNode* cn = customers->head;
+                while(cn && cn->data->account->Account_number!=accnum) cn=cn->next;
+                if(cn) DisplayDayHistory(cn->data->account);
+                else cout<<"Account not found.\n";
+            }
+            break;
         case 0:
             return;
         default:
@@ -393,6 +407,18 @@ int main()
             StatisticsMenu(customers, employees);
             break;
 
+        case 14:
+            finalizeAllAccounts(customers);
+            break;
+        case 15:
+            {
+                unsigned int accnum; cout<<"Account number: "; cin>>accnum;
+                CustomerNode* cn = customers->head;
+                while(cn && cn->data->account->Account_number!=accnum) cn=cn->next;
+                if(cn) DisplayDayHistory(cn->data->account);
+                else cout<<"Account not found.\n";
+            }
+            break;
         case 0:
             return 0;
         }

@@ -758,3 +758,92 @@ void ManageLoanRequests(CustomerList *customers, LoanRequestQueue *queue)
     }
     cout << "\n✔ All loan requests have been processed.\n";
 }
+
+
+#include "core/TransactionNode.h"
+#include <vector>
+#include <fstream>
+
+void finalizeAllAccounts(CustomerList* customers)
+{
+    if (!customers || !customers->head) {
+        cout << "No customers found.\n";
+        return;
+    }
+
+    bool anyFinalized = false;
+    std::ofstream ofs("data/finalized_transactions.txt", std::ios::app);
+    if (!ofs.is_open()) {
+        cout << "Warning: could not open data/finalized_transactions.txt for writing. Finalization will still clear stacks.\n";
+    }
+
+    CustomerNode* cnode = customers->head;
+    while (cnode != nullptr) {
+        if (cnode->data && cnode->data->account) {
+            Account* acc = cnode->data->account;
+
+            if (acc->transactions && !isTransactionStackEmpty(acc->transactions)) {
+                anyFinalized = true;
+
+                std::vector<Transaction> temp;
+
+                // Pop all transactions (newest first) into temp
+                while (!isTransactionStackEmpty(acc->transactions)) {
+                    StackNode* node = popTransaction(acc->transactions);
+                    if (!node) break;
+                    temp.push_back(node->transaction);
+                    deleteTransaction(node);
+                }
+
+                // Append to account->dayHistory (oldest -> newest)
+                for (int i = (int)temp.size() - 1; i >= 0; --i) {
+                    Transaction &t = temp[i];
+                    // create node
+                    TransactionNode* n = new TransactionNode();
+                    n->data = t;
+                    n->next = nullptr;
+
+                    if (acc->dayHistory == nullptr) {
+                        acc->dayHistory = n;
+                    } else {
+                        TransactionNode* p = acc->dayHistory;
+                        while (p->next != nullptr) p = p->next;
+                        p->next = n;
+                    }
+
+                    if (ofs.is_open()) {
+                        ofs << t.Transaction_ID << "," << t.Account_Number << "," << t.Type << "," << t.Amount << "," 
+                            << t.Date.day << "/" << t.Date.month << "/" << t.Date.year << "\n";
+                    }
+                }
+
+                cout << "Finalized transactions for account " << acc->Account_number << ".\n";
+            }
+        }
+        cnode = cnode->next;
+    }
+
+    if (ofs.is_open()) ofs.close();
+
+    if (!anyFinalized) {
+        cout << "No accounts had transactions to finalize.\n";
+    } else {
+        cout << "All daily transactions have been finalized and persisted. Undo disabled for those accounts.\n";
+    }
+}
+
+
+void DisplayDayHistory(Account* acc) {
+    if (!acc) { cout << "Null account.\n"; return; }
+    TransactionNode* curr = acc->dayHistory;
+    if (!curr) { cout << "No finalized transactions for this account.\n"; return; }
+    cout << "\n--- Finalized Transactions for Account " << acc->Account_number << " ---\n";
+    while (curr) {
+        cout << "ID: " << curr->data.Transaction_ID
+             << " Type: " << curr->data.Type
+             << " Amount: " << curr->data.Amount
+             << " Date: " << curr->data.Date.day << "/" << curr->data.Date.month << "/" << curr->data.Date.year
+             << "\n";
+        curr = curr->next;
+    }
+}
