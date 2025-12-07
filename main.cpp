@@ -26,7 +26,7 @@ using namespace std;
 // CUSTOMER SEARCH / INSERT HELPERS
 // =====================================
 
-void AddCustomerNode(CustomerList &list, Customer* c)
+void AddCustomerNode(CustomerList &list, Customer *c)
 {
     CustomerNode *node = new CustomerNode;
     node->data = c;
@@ -34,7 +34,7 @@ void AddCustomerNode(CustomerList &list, Customer* c)
     list.head = node;
 }
 
-Customer *FindCustomerByAccountNumber(CustomerList* list, unsigned int accNum)
+Customer *FindCustomerByAccountNumber(CustomerList *list, unsigned int accNum)
 {
     CustomerNode *cur = list->head;
     while (cur)
@@ -50,7 +50,7 @@ Customer *FindCustomerByAccountNumber(CustomerList* list, unsigned int accNum)
 // EMPLOYEE FILE-LOAD / SAVE HELPERS
 // =====================================
 
-void CustomerMenu(CustomerList* &customers, LoanRequestQueue *queue, Customer *loggedIn)
+void CustomerMenu(CustomerList *&customers, LoanRequestQueue *queue, Customer *loggedIn)
 {
     cout << "\nLogged in as: " << loggedIn->loginUsername << endl;
     int choice;
@@ -106,7 +106,7 @@ void CustomerMenu(CustomerList* &customers, LoanRequestQueue *queue, Customer *l
 // EMPLOYEE MENU
 // =====================================
 
-void EmployeeMenu(CustomerList* &customers,
+void EmployeeMenu(CustomerList *&customers,
                   EmployeeArray &employees,
                   LoanRequestQueue *queue,
                   ArchivedAccountArray &archived,
@@ -153,11 +153,20 @@ void EmployeeMenu(CustomerList* &customers,
             Employee e;
 
             cout << "Name: ";
+            cin.ignore();
             getline(cin, e.Name);
-
+            while (!IsAlphabetic(e.Name))
+            {
+                cout << "Name: ";
+                getline(cin, e.Name);
+            }
             cout << "Last name: ";
             getline(cin, e.Last_name);
-
+            while (!IsAlphabetic(e.Last_name))
+            {
+                cout << "Last name: ";
+                getline(cin, e.Last_name);
+            }
             cout << "Address: ";
             getline(cin, e.Address);
 
@@ -203,7 +212,8 @@ void EmployeeMenu(CustomerList* &customers,
         case 4:
         {
             int added = 0;
-            while (!added) {
+            while (!added)
+            {
                 added = AddCustomerAccount(customers);
             }
             break;
@@ -267,7 +277,7 @@ void EmployeeMenu(CustomerList* &customers,
 // STATISTICS MENU
 // =====================================
 
-void StatisticsMenu(CustomerList* customers, const EmployeeArray &employees)
+void StatisticsMenu(CustomerList *customers, const EmployeeArray &employees)
 {
     int choice;
 
@@ -337,7 +347,7 @@ void StatisticsMenu(CustomerList* customers, const EmployeeArray &employees)
 
 int main()
 {
-    CustomerList* customers;
+    CustomerList *customers;
     createCustomerList(customers);
 
     EmployeeArray employees = createEmployeeArray(10);

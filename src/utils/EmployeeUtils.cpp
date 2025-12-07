@@ -129,7 +129,6 @@ int modifyEmployee(EmployeeArray &employees, unsigned int id)
             cin >> employees.data[i].Last_name;
 
             cout << "Enter new address: ";
-            cin.ignore();
             getline(cin, employees.data[i].Address);
 
             cout << "Enter new salary: ";
@@ -330,7 +329,7 @@ void DisplayMostRecentlyHiredEmployee(const EmployeeArray &employees)
 }
 
 // this makes the account numbers unique by incrementing for each new account
-static unsigned int nextAccountNumber = 0;
+static unsigned int nextAccountNumber = 1;
 
 bool IsAlphabetic(const string &str)
 {
@@ -349,19 +348,19 @@ int AddCustomerAccount(CustomerList *&list)
     cout << "\n--- Add New Customer Account ---\n";
     cout << "Enter First Name: " << endl;
     string firstname;
-    cin >> firstname;
+    cin.ignore();
+    getline(cin, firstname);
     while (!IsAlphabetic(firstname))
     {
         cout << "Enter First Name: " << endl;
-        cin >> firstname;
     }
     cout << "Enter Last Name: " << endl;
     string lastname;
-    cin >> lastname;
+    getline(cin, lastname);
     while (!IsAlphabetic(lastname))
     {
         cout << "Enter Last Name: " << endl;
-        cin >> lastname;
+        getline(cin, lastname);
     }
     cout << "Enter Username: " << endl;
     string username;

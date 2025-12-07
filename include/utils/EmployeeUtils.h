@@ -16,7 +16,7 @@
 #include <iostream>
 using namespace std;
 
-
+bool IsAlphabetic(const string &str);
 bool resizeEmployeeArray(EmployeeArray& employees);
 EmployeeArray createEmployeeArray(int initialCapacity);
 void addEmployee(EmployeeArray& employees, const Employee& e);
