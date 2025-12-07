@@ -9,8 +9,7 @@ using namespace std;
 #include "core/LoanNode.h"
 #include "core/Transaction.h"
 #include "utils/Date.h"
-
-struct TransactionNode;
+#include "core/TransactionNode.h"
 
 struct Account {
 	unsigned int Account_number;// unique
@@ -21,7 +20,7 @@ struct Account {
 	date Opening_date;
 	string Status; //(active, inactive, closed)
 	double Balance; //(in Tunisian dinars)
-
+	TransactionNode* dayHistory;
 	LoanList* loans;
 	TransactionStack* transactions; // Stack of transactions
 };

@@ -197,18 +197,21 @@ void EmployeeMenu(CustomerList *&customers,
             }
 
             addEmployee(employees, e);
+            SaveAll(customers, employees);
             break;
         }
         case 2:
             cout << "Employee Id: ";
             cin >> id;
             deleteEmployee(employees, id);
+            SaveAll(customers, employees);
             break;
 
         case 3:
             cout << "Employee Id: ";
             cin >> id;
             modifyEmployee(employees, id);
+            SaveAll(customers, employees);
             break;
 
         case 4:
@@ -336,6 +339,7 @@ void StatisticsMenu(CustomerList *customers, const EmployeeArray &employees)
             break;
         case 14:
             finalizeAllAccounts(customers);
+            SaveAll(customers, employees);
             break;
         case 15:
             {
@@ -409,6 +413,7 @@ int main()
 
         case 14:
             finalizeAllAccounts(customers);
+            SaveAll(customers, employees);
             break;
         case 15:
             {
