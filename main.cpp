@@ -13,7 +13,7 @@ class CompletedLoanList;
 #include "core/ArchivedAccount.h"
 #include "core/CompletedLoanListMeth.h"
 #include "core/LoanRequestQueueMeth.h"
-
+#include "utils/DataManager.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -50,7 +50,7 @@ Customer *FindCustomerByAccountNumber(CustomerList *list, unsigned int accNum)
 // EMPLOYEE FILE-LOAD / SAVE HELPERS
 // =====================================
 
-void CustomerMenu(CustomerList *&customers, LoanRequestQueue *queue, Customer *loggedIn)
+void CustomerMenu(EmployeeArray &employees, CustomerList *&customers, LoanRequestQueue *queue, Customer *loggedIn)
 {
     cout << "\nLogged in as: " << loggedIn->loginUsername << endl;
     int choice;
@@ -82,18 +82,22 @@ void CustomerMenu(CustomerList *&customers, LoanRequestQueue *queue, Customer *l
         {
         case 1:
             DepositMoney(loggedIn->account);
+            SaveAll(customers, employees);
             break;
         case 2:
             WithdrawMoney(loggedIn->account);
+            SaveAll(customers, employees);
             break;
         case 3:
             SubmitLoanRequest(loggedIn, queue);
+            SaveAll(customers, employees);
             break;
         case 4:
             DisplayLoansByCustomer(loggedIn);
             break;
         case 5:
             UndoLastTransaction(loggedIn->account);
+            SaveAll(customers, employees);
             break;
         case 6:
             DisplayTodayTransactions(loggedIn->account);
@@ -152,6 +156,43 @@ void EmployeeMenu(CustomerList *&customers,
         {
         case 1:
         {
+            unsigned int id;
+            cout << "ID: ";
+            while (!(cin >> id))
+            {
+                cin.clear();
+                cin.ignore(10000, '\n');
+                cout << "Invalid input! Please enter a valid id: ";
+            }
+            bool found = false;
+            for (int i = 0; i < employees.size; i++)
+            {
+                if (employees.data[i].Id == id)
+                {
+                    found = true;
+                    break;
+                }
+            }
+            while (found)
+            {
+                cout << "This ID already exists in the database." << endl;
+                cout << "ID: ";
+                while (!(cin >> id))
+                {
+                    cin.clear();
+                    cin.ignore(10000, '\n');
+                    cout << "Invalid input! Please enter a valid id: ";
+                }
+                found = false;
+                for (int i = 0; i < employees.size; i++)
+                {
+                    if (employees.data[i].Id == id)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+            }
             Employee e;
 
             cout << "Name: ";
@@ -195,7 +236,7 @@ void EmployeeMenu(CustomerList *&customers,
                 cin.ignore(10000, '\n');
                 cout << "Invalid input! Please enter a valid bank branch: ";
             }
-
+            cout << "Employee with ID " << id << " not found.\n";
             addEmployee(employees, e);
             SaveAll(customers, employees);
             break;
@@ -221,6 +262,7 @@ void EmployeeMenu(CustomerList *&customers,
             {
                 added = AddCustomerAccount(customers);
             }
+            SaveAll(customers, employees);
             break;
         }
         case 5:
@@ -232,10 +274,12 @@ void EmployeeMenu(CustomerList *&customers,
             unsigned int accNum;
             cin >> accNum;
             ChangeAccountStatus(customers, accNum);
+            SaveAll(customers, employees);
             break;
 
         case 7:
             DeleteClosedAccounts(customers, archived);
+            SaveAll(customers, employees);
             break;
 
         case 8:
@@ -253,14 +297,17 @@ void EmployeeMenu(CustomerList *&customers,
         }
         case 9:
             ChangeLoanStatus(customers);
+            SaveAll(customers, employees);
             break;
 
         case 10:
             DeleteCompletedLoans(customers, completedList);
+            SaveAll(customers, employees);
             break;
 
         case 11:
             ManageLoanRequests(customers, queue);
+            SaveAll(customers, employees);
             break;
 
         case 12:
@@ -271,6 +318,25 @@ void EmployeeMenu(CustomerList *&customers,
             displayEmployeesByBranch(employees);
             break;
 
+        case 14:
+            finalizeAllAccounts(customers);
+            SaveAll(customers, employees);
+            break;
+
+        case 15:
+        {
+            unsigned int accnum;
+            cout << "Account number: ";
+            cin >> accnum;
+            CustomerNode *cn = customers->head;
+            while (cn && cn->data->account->Account_number != accnum)
+                cn = cn->next;
+            if (cn)
+                DisplayDayHistory(cn->data->account);
+            else
+                cout << "Account not found.\n";
+            break;
+        }
         default:
             cout << "Invalid option.\n";
             break;
@@ -342,14 +408,19 @@ void StatisticsMenu(CustomerList *customers, const EmployeeArray &employees)
             SaveAll(customers, employees);
             break;
         case 15:
-            {
-                unsigned int accnum; cout<<"Account number: "; cin>>accnum;
-                CustomerNode* cn = customers->head;
-                while(cn && cn->data->account->Account_number!=accnum) cn=cn->next;
-                if(cn) DisplayDayHistory(cn->data->account);
-                else cout<<"Account not found.\n";
-            }
-            break;
+        {
+            unsigned int accnum;
+            cout << "Account number: ";
+            cin >> accnum;
+            CustomerNode *cn = customers->head;
+            while (cn && cn->data->account->Account_number != accnum)
+                cn = cn->next;
+            if (cn)
+                DisplayDayHistory(cn->data->account);
+            else
+                cout << "Account not found.\n";
+        }
+        break;
         case 0:
             return;
         default:
@@ -399,7 +470,7 @@ int main()
             if (attempts < 0)
                 continue;
 
-            CustomerMenu(customers, queue, loggedInCustomer);
+            CustomerMenu(employees, customers, queue, loggedInCustomer);
 
             break;
         }
@@ -409,20 +480,6 @@ int main()
 
         case 3:
             StatisticsMenu(customers, employees);
-            break;
-
-        case 14:
-            finalizeAllAccounts(customers);
-            SaveAll(customers, employees);
-            break;
-        case 15:
-            {
-                unsigned int accnum; cout<<"Account number: "; cin>>accnum;
-                CustomerNode* cn = customers->head;
-                while(cn && cn->data->account->Account_number!=accnum) cn=cn->next;
-                if(cn) DisplayDayHistory(cn->data->account);
-                else cout<<"Account not found.\n";
-            }
             break;
         case 0:
             return 0;

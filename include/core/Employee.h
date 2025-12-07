@@ -4,9 +4,8 @@
 #include <string>
 using namespace std;
 #include "utils/Date.h"
-static unsigned int nextEmployeeId = 1;
 struct Employee {
-    unsigned int Id = nextEmployeeId++;
+    unsigned int Id;
     string Name;
     string Last_name;
     string Address;
