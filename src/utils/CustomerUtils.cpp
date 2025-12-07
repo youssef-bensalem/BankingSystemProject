@@ -1,33 +1,45 @@
-#include "customer.h"
-#include "LoanRequest.h"
-#include "LoanListMeth.h"
+#include "core/Customer.h"
+#include "core/LoanRequest.h"
+#include "core/LoanListMeth.h"
+#include "core/LoanRequestQueueMeth.h"
+#include "core/TransactionStackMeth.h"
 #include <string>
 using namespace std;
 
-void createCustomerList(CustomerList& list) {
-    list.head = nullptr;
+void createCustomerList(CustomerList* &list) {
+    list = new (nothrow) CustomerList {
+        nullptr
+    };
+    if (!list) cerr << "Memory allocation failed for CustomerList\n";
 }
 
-int CustomerLogin(Customer* customer) {
-    if (!customer)
-        return -1;
+bool CustomerLogin(CustomerList* &customers, Customer* &loggedInCustomer)
+{
+    string username, password;
 
-    string usernameInput, passwordInput;
-
-    cout << "\n--- Customer Login ---\n";
+    cout << "\n===== CUSTOMER LOGIN =====\n";
     cout << "Username: ";
-    cin >> usernameInput;
-
+    cin >> username;
     cout << "Password: ";
-    cin >> passwordInput;
+    cin >> password;
 
-    if (usernameInput != customer->loginUsername)
-        return 0;
+    CustomerNode* current = customers->head;
 
-    if (passwordInput != customer->loginPassword)
-        return 0;
+    while (current != nullptr)
+    {
+        if (current->data->loginUsername == username &&
+            current->data->loginPassword == password)
+        {
+            loggedInCustomer = current->data;
+            cout << "\nLogin successful. Welcome " 
+                 << loggedInCustomer->loginUsername << "!\n";
+            return true;
+        }
+        current = current->next;
+    }
 
-    return 1;
+    cout << "\nInvalid credentials. Try again.\n";
+    return false;
 }
 
 void DisplayLoansByCustomer(Customer* customer) {
@@ -36,7 +48,7 @@ void DisplayLoansByCustomer(Customer* customer) {
         return;
     }
 
-    LoanNode* current = customer->account.loans.head;
+    LoanNode* current = customer->account->loans->head;
 
     if (!current) {
         cout << "This customer has no loans.\n";
@@ -44,8 +56,8 @@ void DisplayLoansByCustomer(Customer* customer) {
     }
 
     cout << "\n--- Loans for Customer: "
-        << customer->fullName
-        << " (Account " << customer->account.Account_number << ") ---\n";
+        << customer->account->Account_holder_name
+        << " (Account " << customer->account->Account_number << ") ---\n";
 
     while (current != nullptr) {
         printLoan(&current->data);
@@ -59,14 +71,14 @@ int SubmitLoanRequest(Customer* customer, LoanRequestQueue* queue) {
         return -1;
     }
 
-    if (customer->account.Status != "active") {
+    if (customer->account->Status != "active") {
         return -2;
     }
 
     LoanRequest request;
 
     request.requestID = rand();
-    request.accountNumber = customer->account.Account_number;
+    request.accountNumber = customer->account->Account_number;
 
     cout << "\n--- Loan Request Submission ---\n";
 
@@ -107,12 +119,12 @@ int WithdrawMoney(Account* account) {
         return -2;
     }
 
-    double amount;
+    unsigned int amount;
     cout << "\nEnter amount to withdraw (10, 20, 50 TND): ";
     cin >> amount;
-
-    if (amount != 10 && amount != 20 && amount != 50) {
-        cout << "Withdrawal denied: Invalid denomination.\n";
+    
+    if (amount % 10 != 0) {
+        cout << "Withdrawal denied: Invalid denomination (amount must be divisible by 10).\n";
         return 0;
 	}
     if (amount <= 0) {
@@ -256,7 +268,7 @@ int UndoLastTransaction(Account* account) {
         cout << "Error: Transaction stack not initialized.\n";
         return -2;
     }
-    if (isTransactionStackEmpty(*account->transactions)) {
+    if (isTransactionStackEmpty(account->transactions)) {
         cout << "No transactions to undo.\n";
         return 0;
     }

@@ -3,17 +3,17 @@
 #define CUSTOMER_H
 
 #include <string>
-#include "Account.h"
+#include "core/Account.h"
 using namespace std;
 
 struct Customer {
     string loginUsername;
     string loginPassword;
-    Account account;
+    Account* account;
 };
 
 struct CustomerNode {
-    Customer data;
+    Customer* data;
     CustomerNode* next;
 };
 

@@ -1,5 +1,5 @@
-﻿#include "Transaction.h"
-#include "TransactionStackMeth.h"
+﻿#include "core/Transaction.h"
+#include "core/TransactionStackMeth.h"
 #include <iostream>
 using namespace std;
 
@@ -17,8 +17,6 @@ Transaction createTransaction(
 	t.Type = type;
 	t.Amount = amount;
 	t.Date = d;
-
-	t.next = nullptr;
 
 	return t;
 }
@@ -39,9 +37,11 @@ void deleteTransaction(StackNode* transaction)
 	delete transaction;
 }
 
-TransactionStack *createTransactionStack()
+TransactionStack* createTransactionStack()
 {
-	auto *stack = new (nothrow) TransactionStack;
+	TransactionStack* stack = new (nothrow) TransactionStack {
+		nullptr
+	};
 
 	if (stack == nullptr)
 	{
@@ -55,7 +55,7 @@ TransactionStack *createTransactionStack()
 
 void deleteTransactionStack(TransactionStack *stack)
 {
-	Transaction *t = stack->top;
+	StackNode *t = stack->top;
 	while (t != nullptr)
 	{
 		stack->top = t->next;
@@ -68,7 +68,7 @@ void deleteTransactionStack(TransactionStack *stack)
 int pushTransaction(TransactionStack *stack, StackNode *transaction)
 {
 	int success = 1;
-	if (isTransactionStackFull(*stack))
+	if (isTransactionStackFull(stack))
 	{
 		cout << "Transaction Stack is full. Cannot push new transaction." << endl;
 		success = 0;
@@ -81,49 +81,46 @@ int pushTransaction(TransactionStack *stack, StackNode *transaction)
 	return success;
 }
 
-StackNode *popTransaction(TransactionStack &stack)
+StackNode *popTransaction(TransactionStack* stack)
 {
 	if (isTransactionStackEmpty(stack))
 	{
 		cout << "\nTransaction stack is empty";
 	}
 
-	Transaction *popped = stack.top;
-	stack.top = stack.top->next;
-	popped->next = nullptr;
-	stack.size--;
+	StackNode *popped = stack->top;
+	stack->top = stack->top->next;
 
 	return popped;
 }
 
-StackNode *peekTransaction(const TransactionStack &stack)
+StackNode *peekTransaction(const TransactionStack* stack)
 {
-	if (stack.top == nullptr)
+	if (stack->top == nullptr)
 	{
 		cout << "Stack is empty" << endl;
 	}
-	return stack.top;
+	return stack->top;
 }
 
-void clearTransactionStack(TransactionStack &stack)
+void clearTransactionStack(TransactionStack* stack)
 {
-	StackNode *current = stack.top;
+	StackNode *current = stack->top;
 	while (current != nullptr)
 	{
 		StackNode *temp = current;
 		current = current->next;
 		delete temp;
 	}
-	stack.top = nullptr;
-	stack.size = 0;
+	stack->top = nullptr;
 }
 
-bool isTransactionStackEmpty(const TransactionStack &stack)
+bool isTransactionStackEmpty(const TransactionStack* stack)
 {
-	return (stack.top == nullptr);
+	return (stack->top == nullptr);
 }
 
-bool isTransactionStackFull(const TransactionStack &stack)
+bool isTransactionStackFull(const TransactionStack* stack)
 {
 	StackNode *temp = new (nothrow) StackNode;
 	if (!temp)
@@ -132,9 +129,9 @@ bool isTransactionStackFull(const TransactionStack &stack)
 	return false;
 }
 
-void DisplayTransactionStack(const TransactionStack &stack)
+void DisplayTransactionStack(const TransactionStack* stack)
 {
-	StackNode* t = stack.top;
+	StackNode* t = stack->top;
 
 	if (!t)
 	{
@@ -149,10 +146,10 @@ void DisplayTransactionStack(const TransactionStack &stack)
 	}
 }
 
-int transactionStackSize(const TransactionStack &stack)
+int transactionStackSize(const TransactionStack* stack)
 {
 	int size = 0;
-	StackNode *t = stack.top;
+	StackNode *t = stack->top;
 
 	while (t != nullptr)
 	{

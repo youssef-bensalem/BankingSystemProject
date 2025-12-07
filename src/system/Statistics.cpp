@@ -1,17 +1,17 @@
 ﻿#include <iostream>
-#include "Statistics.h"
+#include "system/Statistics.h"
 
 using namespace std;
 
-int TotalNumberOfLoans(const CustomerList& customers) {
-    if (customers.head == nullptr) {
+int TotalNumberOfLoans(CustomerList* customers) {
+    if (customers->head == nullptr) {
         cout << "No accounts to display.\n";
         return 0;
     }
     int numberOfLoans = 0;
-    CustomerNode* current1 = customers.head;
+    CustomerNode* current1 = customers->head;
     while (current1) {
-        LoanNode* current2 = current1->data.account.loans.head;
+        LoanNode* current2 = current1->data->account->loans->head;
         while (current2) {
             numberOfLoans++;
             current2 = current2->next;
@@ -21,8 +21,8 @@ int TotalNumberOfLoans(const CustomerList& customers) {
     return numberOfLoans;
 }
 
-int CountLoansByType(const CustomerList& customers, const string& type) {
-    if (customers.head == nullptr) {
+int CountLoansByType(CustomerList* customers, const string& type) {
+    if (customers->head == nullptr) {
         cout << "No accounts to display.\n";
         return 0;
     }
@@ -30,9 +30,9 @@ int CountLoansByType(const CustomerList& customers, const string& type) {
     int HomeType = 0;
     int StudentType = 0;
     int BusinessType = 0;
-    CustomerNode* current1 = customers.head;
+    CustomerNode* current1 = customers->head;
     while (current1) {
-        LoanNode* current2 = current1->data.account.loans.head;
+        LoanNode* current2 = current1->data->account->loans->head;
         while (current2) {
             if (current2->data.Loan_type == "car" || current2->data.Loan_type == "Car") CarType++;
             if (current2->data.Loan_type == "home" || current2->data.Loan_type == "Home") HomeType++;
@@ -51,19 +51,19 @@ int CountLoansByType(const CustomerList& customers, const string& type) {
     return 0;
 }
 
-int CountLoansByStatus(const CustomerList& customers, const string& status) {
-    if (customers.head == nullptr) {
+int CountLoansByStatus(CustomerList* customers, const string& status) {
+    if (customers->head == nullptr) {
         cout << "No accounts to display.\n";
         return 0;
     }
     int Active = 0;
     int Completed = 0;
     int Overdue = 0;
-    CustomerNode* current1 = customers.head;
+    CustomerNode* current1 = customers->head;
     while (current1) {
-        LoanNode* ln = current1->data.account.loans.head;
+        LoanNode* ln = current1->data->account->loans->head;
         while (ln) {
-            string s = ln->data.Loan_status;
+            string s = ln->data.Loan_Status;
 
             if (s == "active" || s == "Active") Active++;
             if (s == "completed" || s == "Completed") Completed++;
@@ -98,18 +98,18 @@ int compareDates(const date& a, const date& b) {
     return 0;
 }   //used in activeLoansInRange
 
-int ActiveLoansInRange(const CustomerList& customers, const date& startD, const date& endD) {
-    if (customers.head == nullptr) {
+int ActiveLoansInRange(CustomerList* customers, const date& startD, const date& endD) {
+    if (customers->head == nullptr) {
         cout << "No customers available.\n";
         return 0;
     }
     int countLoans = 0;
-    CustomerNode* current1 = customers.head;
+    CustomerNode* current1 = customers->head;
     while (current1) {
-        LoanNode* current2 = current1->data.account.loans.head;
+        LoanNode* current2 = current1->data->account->loans->head;
         while (current2) {
             Loan& L = current2->data;
-            if (L.Loan_status == "active" || L.Loan_status == "Active") {
+            if (L.Loan_Status == "active" || L.Loan_Status == "Active") {
                 bool startsBeforeRangeEnds =compareDates(L.Start_Date, endD) <= 0;
                 bool endsAfterRangeStarts =compareDates(L.End_Date, startD) >= 0;
                 // If loan overlaps the user range
@@ -122,21 +122,21 @@ int ActiveLoansInRange(const CustomerList& customers, const date& startD, const 
     return countLoans;
 }
 
-Customer* CustomerWithMostLoans(CustomerList& customers) {
-    if (customers.head == nullptr) {
+Customer* CustomerWithMostLoans(CustomerList* customers) {
+    if (customers->head == nullptr) {
         cout << "No customers available.\n";
         return nullptr;
     }
-    CustomerNode* current = customers.head;
+    CustomerNode* current = customers->head;
     Customer* highestCustomer = nullptr;
     int maxLoans = 0;
 
     while (current) {
-        int loanCount = current->data.account.loans.size;
+        int loanCount = current->data->account->loans->size;
 
         if (loanCount > maxLoans) {
             maxLoans = loanCount;
-            highestCustomer = &current->data;
+            highestCustomer = current->data;
         }
 
         current = current->next;
@@ -145,36 +145,36 @@ Customer* CustomerWithMostLoans(CustomerList& customers) {
     return highestCustomer;
 }
 
-Customer* CustomerWithHighestBalance(CustomerList& customers) {
-    if (customers.head == nullptr) {
+Customer* CustomerWithHighestBalance(CustomerList* customers) {
+    if (customers->head == nullptr) {
         cout << "No customers available.\n";
         return nullptr;
     }
-    CustomerNode* current = customers.head;
-    Customer* richest = &current->data;
+    CustomerNode* current = customers->head;
+    Customer* richest = current->data;
     current = current->next;
 
     while (current) {
-        if (current->data.account.Balance > richest->account.Balance) {
-            richest = &current->data;
+        if (current->data->account->Balance > richest->account->Balance) {
+            richest = current->data;
         }
         current = current->next;
     }
     return richest; //needs display 
 }
 
-Customer* CustomerWithLowestBalance(CustomerList& customers) {
-    if (customers.head == nullptr) {
+Customer* CustomerWithLowestBalance(CustomerList* customers) {
+    if (customers->head == nullptr) {
         cout << "No customers available.\n";
         return nullptr;
     }
-    CustomerNode* current = customers.head;
-    Customer* poorest = &current->data;
+    CustomerNode* current = customers->head;
+    Customer* poorest = current->data;
     current = current->next;
 
     while (current) {
-        if (current->data.account.Balance < poorest->account.Balance) {
-            poorest = &current->data;
+        if (current->data->account->Balance < poorest->account->Balance) {
+            poorest = current->data;
         }
         current = current->next;
     }

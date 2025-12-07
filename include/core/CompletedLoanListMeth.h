@@ -1,9 +1,9 @@
 #pragma once
 #ifndef COMPLETEDLOANLISTMETH_H
 #define	COMPLETEDLOANLISTMETH_H
-#include "Loan.h"
-#include "LoanNode.h"
-#include "CompletedLoanNode.h"
+#include "core/Loan.h"
+#include "core/LoanNode.h"
+#include "core/CompletedLoanNode.h"
 using namespace std;
 
 CompletedLoanList* createCompletedLoanList();
@@ -12,7 +12,7 @@ CompletedLoanNode* createCompletedLoan(const Loan& loan);
 void destroyCompletedLoan(CompletedLoanNode& completed_loan_node);
 int findCompletedLoan(const Loan& loan, const CompletedLoanList& list);
 int addCompletedLoan(CompletedLoanList& list, const Loan& loan);
-int removeCompletedLoan(CompletedLoanList& list, const string& loanID);
+int removeCompletedLoan(CompletedLoanList& list, unsigned int loanID);
 int countCompletedLoans(const CompletedLoanList& list);
 void printCompletedLoan(const CompletedLoanNode& loannode);
 void printAllCompletedLoans(const CompletedLoanList& list);

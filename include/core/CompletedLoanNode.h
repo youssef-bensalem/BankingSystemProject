@@ -2,7 +2,7 @@
 #ifndef COMPLETEDLOANNODE_H
 #define COMPLETEDLOANNODE_H
 
-#include "Loan.h"
+#include "core/Loan.h"
 
 struct CompletedLoanNode {
     Loan data;
@@ -11,6 +11,8 @@ struct CompletedLoanNode {
 
 struct CompletedLoanList {
     CompletedLoanNode* head;
+    CompletedLoanNode* tail;
+    int size;
 };
 
 #endif

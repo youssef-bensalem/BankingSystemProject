@@ -3,22 +3,21 @@
 #define LOANLISTMETH_H
 
 #include "LoanNode.h"
-#include <string>
+#include <iostream>
 using namespace std;
 
-LoanList createLoanList();
-void destroyLoanList(LoanList& list);
 LoanNode* createLoanNode(const Loan& loan);
-int insertLoan(LoanList& list, const Loan& loan);
-int removeLoan(LoanList& list, const string& ID);
-LoanNode* findLoan(LoanNode* head, unsigned int loanID);
-int countLoans(const LoanList& list);
-void printLoan(const Loan& loan);
-void printAllLoans(const LoanList& list);
-bool LoanListEmpty(LoanList& list);
+LoanList* createLoanList();
+void destroyLoanList(LoanList* list);
+int insertLoan(LoanList* list, const Loan& loan);
+bool LoanListEmpty(const LoanList& list);
 bool LoanListFull(LoanList& list);
-int updateLoanPayment(LoanList& list, const string& loanID, double paymentAmount);
-
+int removeLoan(LoanList* list, unsigned int ID);
+int countLoans(const LoanList& list);
+LoanNode* findLoan(LoanNode* head, unsigned int loanID);
+void printLoan(const Loan* loan);
+void printAllLoans(const LoanList* list);
+int updateLoanPayment(LoanList* list, unsigned int loanID, double paymentAmount);
 
 #endif // LOANLISTMETH_H
 

@@ -1,11 +1,11 @@
 #pragma once
 #ifndef ARCHIVEDACCOUNT_H
 #define ARCHIVEDACCOUNT_H
-#include "Account.h"
+#include "core/Account.h"
 using namespace std;
 
 struct ArchivedAccount {
-    Account acc;
+    Account* acc;
 };
 
 struct ArchivedAccountArray {
@@ -14,9 +14,8 @@ struct ArchivedAccountArray {
     int capacity;
 };
 
-ArchivedAccountArray createArchivedAccountArray(int initialCap = 5);
+ArchivedAccountArray createArchivedAccountArray(int initialCap);
 bool resizeArchivedArray(ArchivedAccountArray& arr);
-void addArchivedAccount(ArchivedAccountArray& arr, const Account& acc);
-
+void addArchivedAccount(ArchivedAccountArray& arr, Account* acc);
 
 #endif

@@ -4,15 +4,14 @@
 
 #include <string>
 using namespace std;
-#include "Date.h"
+#include "utils/Date.h"
 
 struct Transaction {
     unsigned int Transaction_ID;
     unsigned int Account_Number;
     string Type;       // deposit or withdrawal
     double Amount;
-    date Date;
-	Transaction* next;  
+    date Date; 
 };
 struct StackNode {
     Transaction transaction;

@@ -2,7 +2,7 @@
 #ifndef LOANREQUESTQUEUEMETH_H
 #define LOANREQUESTQUEUEMETH_H
 
-#include "LoanRequest.h"
+#include "core/LoanRequest.h"
 using namespace std;
 
 LoanRequestQueue* createLoanRequestQueue();

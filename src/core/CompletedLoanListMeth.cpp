@@ -1,4 +1,4 @@
-﻿#include "../core/CompletedLoanListMeth.h"
+﻿#include "core/CompletedLoanListMeth.h"
 #include <string>
 #include <iostream>
 using namespace std;
@@ -72,7 +72,7 @@ int addCompletedLoan(CompletedLoanList& list, const Loan& loan) {
     return 1;
 }
 
-int removeCompletedLoan(CompletedLoanList* list, int loanID) {
+int removeCompletedLoan(CompletedLoanList* list, unsigned int loanID) {
     if (list->head == nullptr) return 1; // empty
 
     CompletedLoanNode* curr = list->head;

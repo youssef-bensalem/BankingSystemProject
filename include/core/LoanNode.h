@@ -2,7 +2,7 @@
 #ifndef LOANNODE_H
 #define	LOANNODE_H
 
-#include "Loan.h"
+#include "core/Loan.h"
 using namespace std;
 
 struct LoanNode {

@@ -4,9 +4,11 @@
 
 #include <string>
 using namespace std;
-#include "Loan.h"
-#include "Transaction.h"
-#include "Date.h"
+#include "core/Loan.h"
+#include "core/LoanRequest.h"
+#include "core/LoanNode.h"
+#include "core/Transaction.h"
+#include "utils/Date.h"
 
 struct Account {
 	unsigned int Account_number;// unique
@@ -18,7 +20,7 @@ struct Account {
 	string Status; //(active, inactive, closed)
 	double Balance; //(in Tunisian dinars)
 
-	LoanList loans;
+	LoanList* loans;
 	TransactionStack* transactions; // Stack of transactions
 };
 

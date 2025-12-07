@@ -1,4 +1,4 @@
-#include "ArchivedAccount.h"
+#include "core/ArchivedAccount.h"
 #include <iostream>
 using namespace std;
 
@@ -24,7 +24,7 @@ bool resizeArchivedArray(ArchivedAccountArray& arr) {
     return true;
 }
 
-void addArchivedAccount(ArchivedAccountArray& arr, const Account& acc) {
+void addArchivedAccount(ArchivedAccountArray& arr, Account* acc) {
     if (arr.size == arr.capacity) {
         resizeArchivedArray(arr);
     }
