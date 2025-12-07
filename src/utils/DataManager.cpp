@@ -5,7 +5,7 @@
 #include <iostream>
 using namespace std;
 
-namespace DataManager {
+
 
 void LoadAll(CustomerList*& customers, EmployeeArray& employees) {
     createCustomerList(customers);
@@ -30,8 +30,8 @@ void LoadAll(CustomerList*& customers, EmployeeArray& employees) {
             ss>>e.Hire_date.day>>comma>>e.Hire_date.month>>comma>>e.Hire_date.year>>comma;
             ss>>e.Bank_branch;
             employees.data[employees.size++]=e;
-        }
-    }
+        
+    
 
     // load customers + accounts
     ifstream fc("data/customers.txt");
@@ -62,18 +62,18 @@ void LoadAll(CustomerList*& customers, EmployeeArray& employees) {
 
             c->account=acc;
 
-            CustomerNode* node=new CustomerNode{c, customers->head};
+            CustomerNode* node=new CustomerNode{c, customers->head;
             customers->head=node;
-        }
-    }
-}
+        
+    
+
 
 void SaveAll(CustomerList* customers, const EmployeeArray& employees) {
     ofstream fe("data/employees.txt");
     for(int i=0;i<employees.size;i++){
         Employee e=employees.data[i];
         fe<<e.Id<<","<<e.Name<<","<<e.Last_name<<","<<e.Address<<","<<e.salary<<","<<e.Hire_date.day<<","<<e.Hire_date.month<<","<<e.Hire_date.year<<","<<e.Bank_branch<<"\n";
-    }
+    
     fe.close();
 
     ofstream fc("data/customers.txt");
@@ -83,8 +83,8 @@ void SaveAll(CustomerList* customers, const EmployeeArray& employees) {
         Account* a=c->account;
         fc<<c->loginUsername<<","<<c->loginPassword<<","<<a->Account_number<<","<<a->Account_type<<","<<a->IBAN<<","<<a->Branch_code<<","<<a->Account_holder_name<<","<<a->Opening_date.day<<","<<a->Opening_date.month<<","<<a->Opening_date.year<<","<<a->Status<<","<<a->Balance<<"\n";
         cn=cn->next;
-    }
+    
     fc.close();
-}
 
-}
+
+
