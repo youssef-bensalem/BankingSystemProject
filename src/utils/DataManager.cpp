@@ -83,19 +83,16 @@ void SaveAll(CustomerList *customers, const EmployeeArray &employees)
     {
         Employee e = employees.data[i];
         fe << e.Id << "," << e.Name << "," << e.Last_name << "," << e.Address << "," << e.salary << "," << e.Hire_date.day << "," << e.Hire_date.month << "," << e.Hire_date.year << "," << e.Bank_branch << "\n";
-
-        fe.close();
-
-        ofstream fc("data/customers.txt");
-        CustomerNode *cn = customers->head;
-        while (cn)
-        {
-            Customer *c = cn->data;
-            Account *a = c->account;
-            fc << c->loginUsername << "," << c->loginPassword << "," << a->Account_number << "," << a->Account_type << "," << a->IBAN << "," << a->Branch_code << "," << a->Account_holder_name << "," << a->Opening_date.day << "," << a->Opening_date.month << "," << a->Opening_date.year << "," << a->Status << "," << a->Balance << "\n";
-            cn = cn->next;
-
-            fc.close();
-        }
     }
+    fe.close();
+    ofstream fc("data/customers.txt");
+    CustomerNode *cn = customers->head;
+    while (cn)
+    {
+        Customer *c = cn->data;
+        Account *a = c->account;
+        fc << c->loginUsername << "," << c->loginPassword << "," << a->Account_number << "," << a->Account_type << "," << a->IBAN << "," << a->Branch_code << "," << a->Account_holder_name << "," << a->Opening_date.day << "," << a->Opening_date.month << "," << a->Opening_date.year << "," << a->Status << "," << a->Balance << "\n";
+        cn = cn->next;
+    }
+    fc.close();
 }

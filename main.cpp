@@ -194,7 +194,7 @@ void EmployeeMenu(CustomerList *&customers,
                 }
             }
             Employee e;
-
+            e.Id = id;
             cout << "Name: ";
             cin.ignore();
             getline(cin, e.Name);
@@ -236,7 +236,6 @@ void EmployeeMenu(CustomerList *&customers,
                 cin.ignore(10000, '\n');
                 cout << "Invalid input! Please enter a valid bank branch: ";
             }
-            cout << "Employee with ID " << id << " not found.\n";
             addEmployee(employees, e);
             SaveAll(customers, employees);
             break;
