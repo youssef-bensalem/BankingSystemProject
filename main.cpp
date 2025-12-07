@@ -1,6 +1,3 @@
-// =========================
-// FIX 1: Forward declaration
-// =========================
 class CompletedLoanList;
 
 #include "core/Customer.h"
@@ -22,10 +19,6 @@ class CompletedLoanList;
 
 using namespace std;
 
-// =====================================
-// CUSTOMER SEARCH / INSERT HELPERS
-// =====================================
-
 void AddCustomerNode(CustomerList &list, Customer *c)
 {
     CustomerNode *node = new CustomerNode;
@@ -45,10 +38,6 @@ Customer *FindCustomerByAccountNumber(CustomerList *list, unsigned int accNum)
     }
     return nullptr;
 }
-
-// =====================================
-// EMPLOYEE FILE-LOAD / SAVE HELPERS
-// =====================================
 
 void CustomerMenu(EmployeeArray &employees, CustomerList *&customers, LoanRequestQueue *queue, Customer *loggedIn)
 {
@@ -82,22 +71,22 @@ void CustomerMenu(EmployeeArray &employees, CustomerList *&customers, LoanReques
         {
         case 1:
             DepositMoney(loggedIn->account);
-            SaveAll(customers, employees);
+            
             break;
         case 2:
             WithdrawMoney(loggedIn->account);
-            SaveAll(customers, employees);
+            
             break;
         case 3:
             SubmitLoanRequest(loggedIn, queue);
-            SaveAll(customers, employees);
+            
             break;
         case 4:
             DisplayLoansByCustomer(loggedIn);
             break;
         case 5:
             UndoLastTransaction(loggedIn->account);
-            SaveAll(customers, employees);
+            
             break;
         case 6:
             DisplayTodayTransactions(loggedIn->account);
@@ -105,10 +94,6 @@ void CustomerMenu(EmployeeArray &employees, CustomerList *&customers, LoanReques
         }
     }
 }
-
-// =====================================
-// EMPLOYEE MENU
-// =====================================
 
 void EmployeeMenu(CustomerList *&customers,
                   EmployeeArray &employees,
@@ -140,7 +125,6 @@ void EmployeeMenu(CustomerList *&customers,
         cout << "0. Back\nChoice: ";
 
         cin >> choice;
-        // BONUS FIX FOR INVALID NON-INT INPUT
         while (cin.fail())
         {
             cin.clear();
@@ -237,21 +221,21 @@ void EmployeeMenu(CustomerList *&customers,
                 cout << "Invalid input! Please enter a valid bank branch: ";
             }
             addEmployee(employees, e);
-            SaveAll(customers, employees);
+            
             break;
         }
         case 2:
             cout << "Employee Id: ";
             cin >> id;
             deleteEmployee(employees, id);
-            SaveAll(customers, employees);
+            
             break;
 
         case 3:
             cout << "Employee Id: ";
             cin >> id;
             modifyEmployee(employees, id);
-            SaveAll(customers, employees);
+            
             break;
 
         case 4:
@@ -261,7 +245,7 @@ void EmployeeMenu(CustomerList *&customers,
             {
                 added = AddCustomerAccount(customers);
             }
-            SaveAll(customers, employees);
+            
             break;
         }
         case 5:
@@ -273,12 +257,12 @@ void EmployeeMenu(CustomerList *&customers,
             unsigned int accNum;
             cin >> accNum;
             ChangeAccountStatus(customers, accNum);
-            SaveAll(customers, employees);
+            
             break;
 
         case 7:
             DeleteClosedAccounts(customers, archived);
-            SaveAll(customers, employees);
+            
             break;
 
         case 8:
@@ -296,17 +280,17 @@ void EmployeeMenu(CustomerList *&customers,
         }
         case 9:
             ChangeLoanStatus(customers);
-            SaveAll(customers, employees);
+            
             break;
 
         case 10:
             DeleteCompletedLoans(customers, completedList);
-            SaveAll(customers, employees);
+            
             break;
 
         case 11:
             ManageLoanRequests(customers, queue);
-            SaveAll(customers, employees);
+            
             break;
 
         case 12:
@@ -319,7 +303,7 @@ void EmployeeMenu(CustomerList *&customers,
 
         case 14:
             finalizeAllAccounts(customers);
-            SaveAll(customers, employees);
+            
             break;
 
         case 15:
@@ -342,10 +326,6 @@ void EmployeeMenu(CustomerList *&customers,
         }
     }
 }
-
-// =====================================
-// STATISTICS MENU
-// =====================================
 
 void StatisticsMenu(CustomerList *customers, const EmployeeArray &employees)
 {
@@ -382,11 +362,11 @@ void StatisticsMenu(CustomerList *customers, const EmployeeArray &employees)
         case 1:
             cout << TotalNumberOfLoans(customers);
             break;
-        case 2: /* ask type */
+        case 2:
             break;
-        case 3: /* ask status */
+        case 3:
             break;
-        case 4: /* ask date range */
+        case 4:
             break;
         case 5:
             CustomerWithMostLoans(customers);
@@ -400,11 +380,11 @@ void StatisticsMenu(CustomerList *customers, const EmployeeArray &employees)
         case 8:
             cout << TotalEmployees(employees);
             break;
-        case 9: /* ask branch */
+        case 9:
             break;
         case 14:
             finalizeAllAccounts(customers);
-            SaveAll(customers, employees);
+            
             break;
         case 15:
         {
@@ -429,10 +409,6 @@ void StatisticsMenu(CustomerList *customers, const EmployeeArray &employees)
     }
 }
 
-// =====================================
-// MAIN
-// =====================================
-
 int main()
 {
     CustomerList *customers;
@@ -443,9 +419,8 @@ int main()
     LoanRequestQueue *queue = createLoanRequestQueue();
     ArchivedAccountArray archived = createArchivedAccountArray(5);
 
-    // FIX: Correct type expected by header
     CompletedLoanList *completedList = createCompletedLoanList();
-
+    LoadAll(customers, employees, archived, completedList);
     int choice;
     while (true)
     {
@@ -481,6 +456,7 @@ int main()
             StatisticsMenu(customers, employees);
             break;
         case 0:
+            SaveAll(customers, employees, archived, completedList);
             return 0;
         }
     }

@@ -12,7 +12,7 @@ Transaction createTransaction(
 ) {
 	Transaction t;
 
-	t.Transaction_ID = nextTransactionID++;   // ✔ Unique ID
+	t.Transaction_ID = nextTransactionID++;   // Unique ID
 	t.Account_Number = accountNumber;
 	t.Type = type;
 	t.Amount = amount;
@@ -141,7 +141,7 @@ void DisplayTransactionStack(const TransactionStack* stack)
 
 	while (t != nullptr)
 	{
-		//cout << t->Transaction_ID << " " << t->Amount << " " << t->Date-> << endl;
+		cout << t->transaction.Transaction_ID << " " << t->transaction.Amount << " " << t->transaction.Date.day << "/" << t->transaction.Date.month << "/" << t->transaction.Date.year << endl;
 		t = t->next;
 	}
 }

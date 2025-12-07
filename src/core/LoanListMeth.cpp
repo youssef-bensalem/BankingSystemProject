@@ -176,7 +176,6 @@ void printLoan(const Loan *loan)
     cout << "Amount Paid: " << loan->Amount_Paid << endl;
     cout << "Remaining Balance: " << loan->Remaining_Balance << endl;
 
-    // Correct way to display date struct
     cout << "Start Date: "
          << loan->Start_Date.day << "/"
          << loan->Start_Date.month << "/"

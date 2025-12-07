@@ -123,15 +123,12 @@ bool isCompletedLoanListEmpty(const CompletedLoanList* list) {
 };
 
 bool isCompletedLoanListFull(const CompletedLoanList* list) {
-    // Try to allocate one temporary node
     CompletedLoanNode* test = new (nothrow) CompletedLoanNode;
 
     if (test == nullptr) {
-        // Memory allocation failed → list is full
         return true;
     };
 
-    // Allocation succeeded → free it and return false
     delete test;
     return false;
 };

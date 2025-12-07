@@ -76,7 +76,7 @@ int deleteEmployee(EmployeeArray &employees, unsigned int id)
     }
     int index = -1;
     for (int i = 0; i < employees.size; i++)
-    { // search in the whole array
+    { 
         if (employees.data[i].Id == id)
         {
             index = i;
@@ -109,7 +109,7 @@ int modifyEmployee(EmployeeArray &employees, unsigned int id)
     {
         if (employees.data[i].Id == id)
         {
-            cout << "old information:\n"; // display old information
+            cout << "old information:\n";
             cout << "ID: " << employees.data[i].Id << "\n";
             cout << "First Name: " << employees.data[i].Name << "\n";
             cout << "Last Name: " << employees.data[i].Last_name << "\n";
@@ -160,7 +160,7 @@ void displayEmployeesAlphabetically(const EmployeeArray &employees)
         sortedEmployees[i] = employees.data[i];
     }
     for (int i = 0; i < employees.size - 1; i++)
-    { // bubble sort on the copy array  so that we dont change the original array
+    { 
         for (int j = 0; j < employees.size - i - 1; j++)
         {
             if (sortedEmployees[j].Last_name > sortedEmployees[j + 1].Last_name)
@@ -193,7 +193,6 @@ void displayEmployeesAlphabetically(const EmployeeArray &employees)
     delete[] sortedEmployees;
 }
 
-// function existInArray
 bool existInArray(const unsigned int arr[], unsigned int e)
 {
     for (int i = 0; i < 50; i++)
@@ -213,7 +212,7 @@ void displayEmployeesByBranch(const EmployeeArray &employees)
         cout << "No employees to display.\n";
         return;
     }
-    unsigned int AllBranches[50]; // bank has at most 50 branches
+    unsigned int AllBranches[50];
     int counter = 0;
     for (int i = 0; i < employees.size; i++)
     {
@@ -367,7 +366,6 @@ int AddCustomerAccount(CustomerList *&list)
     string password;
     cin >> password;
 
-    // --- Create Account Info ---
     Account *acc = new (nothrow) Account;
     if (!acc)
     {
@@ -428,7 +426,6 @@ int AddCustomerAccount(CustomerList *&list)
     acc->Status = "active";
     acc->Balance = 0;
 
-    // Init loan list and transaction stack
     acc->loans = createLoanList();
     acc->transactions = createTransactionStack();
 
@@ -451,11 +448,9 @@ int AddCustomerAccount(CustomerList *&list)
         return 0;
     }
 
-    // Attach account to customer
     newNode->data->account = acc;
     newNode->data->loginUsername = username;
     newNode->data->loginPassword = password;
-    // Insert into list (HEAD INSERTION)
     newNode->next = list->head;
     list->head = newNode;
 
@@ -539,16 +534,12 @@ void DeleteClosedAccounts(CustomerList *customers, ArchivedAccountArray &archive
 
     while (current != nullptr)
     {
-        // Check if this account is closed
         if (current->data->account->Status == "closed")
         {
-            // Save the account into archived array
             addArchivedAccount(archived, current->data->account);
 
-            // Remove from the linked list
             if (prev == nullptr)
             {
-                // removing head node
                 customers->head = current->next;
             }
             else
@@ -556,7 +547,6 @@ void DeleteClosedAccounts(CustomerList *customers, ArchivedAccountArray &archive
                 prev->next = current->next;
             }
 
-            // delete node
             CustomerNode *temp = current;
             current = current->next;
             delete temp;
@@ -569,7 +559,7 @@ void DeleteClosedAccounts(CustomerList *customers, ArchivedAccountArray &archive
             current = current->next;
         }
     }
-    cout << "\n✔ " << deletedCount << " closed accounts were archived and removed.\n";
+    cout << "\nDone. " << deletedCount << " closed accounts were archived and removed.\n";
 }
 
 void ChangeLoanStatus(CustomerList *customers)
@@ -586,7 +576,7 @@ void ChangeLoanStatus(CustomerList *customers)
     cout << "Enter Account Number: ";
     cin >> accNumber;
 
-    CustomerNode *customer = customers->head; // searching for the customer
+    CustomerNode *customer = customers->head;
     while (customer != nullptr && customer->data->account->Account_number != accNumber)
     {
         customer = customer->next;
@@ -668,7 +658,6 @@ void DeleteCompletedLoans(CustomerList *customers, CompletedLoanList *&completed
          << deletedCount << " completed loans moved to completed loan list.\n";
 }
 
-// these 4 functions are used to simplify ManageLoanRequests
 CustomerNode *findCustomerAccount(CustomerList *customers, unsigned int accountNumber)
 {
     CustomerNode *curr = customers->head;
@@ -678,7 +667,7 @@ CustomerNode *findCustomerAccount(CustomerList *customers, unsigned int accountN
             return curr;
         curr = curr->next;
     }
-    return nullptr; // not found
+    return nullptr; 
 }
 
 int AddLoanToCustomer(Customer *customer, const Loan &loan)
@@ -693,7 +682,7 @@ int AddLoanToCustomer(Customer *customer, const Loan &loan)
     {
         cout << "Failed to add loan to this customer.\n";
     }
-    return result; // 1 = success, 0 = failure
+    return result;
 }
 
 void DeclineLoanRequest(const LoanRequest &request)
@@ -809,7 +798,6 @@ void finalizeAllAccounts(CustomerList *customers)
 
                 std::vector<Transaction> temp;
 
-                // Pop all transactions (newest first) into temp
                 while (!isTransactionStackEmpty(acc->transactions))
                 {
                     StackNode *node = popTransaction(acc->transactions);
@@ -818,12 +806,9 @@ void finalizeAllAccounts(CustomerList *customers)
                     temp.push_back(node->transaction);
                     deleteTransaction(node);
                 }
-
-                // Append to account->dayHistory (oldest -> newest)
                 for (int i = (int)temp.size() - 1; i >= 0; --i)
                 {
                     Transaction &t = temp[i];
-                    // create node
                     TransactionNode *n = new TransactionNode();
                     n->data = t;
                     n->next = nullptr;

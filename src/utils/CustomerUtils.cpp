@@ -201,21 +201,21 @@ int DepositMoney(Account* account) {
     StackNode* node = createTransactionNode(t);
     if (!node) {
         cout << "Deposit failed: Could not allocate transaction node.\n";
-		account->Balance -= amount;//remove the amount
+		account->Balance -= amount;
         return -3;
     }
 
     int ok = pushTransaction(account->transactions, node);
     if (!ok) {
         cout << "Deposit failed: Transaction stack is full.\n";
-        account->Balance -= amount;//remove the amount
+        account->Balance -= amount;
         delete node;
         return 0;
     }
     cout << "Deposit successful.\n"
         << "Amount deposited: " << amount << " TND\n"
         << "New balance: " << account->Balance << " TND\n";
-    return 1; // success
+    return 1;
 }
 
 void DisplayTodayTransactions(Account* account) {
@@ -279,15 +279,15 @@ int UndoLastTransaction(Account* account) {
     Transaction t = node->transaction;
     delete node;
 
-    if (t.Type == "deposit") {//DEPOSIT
+    if (t.Type == "deposit") {
         account->Balance -= t.Amount;
         cout << "Last deposit undone.\n";
     }
-	else if (t.Type == "withdrawal") {//WITHDRAWAL
+	else if (t.Type == "withdrawal") {
         account->Balance += t.Amount;
         cout << "Last withdrawal undone.\n";
     }
     cout << "New balance (after undoing): " << account->Balance << " TND\n";
 
-    return 1; // success
+    return 1;
 }

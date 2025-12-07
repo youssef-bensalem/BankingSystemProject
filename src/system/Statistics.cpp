@@ -86,17 +86,14 @@ int compareDates(const date& a, const date& b) {
     if (a.year < b.year) return -1;
     if (a.year > b.year) return 1;
 
-    // years equal → compare months
     if (a.month < b.month) return -1;
     if (a.month > b.month) return 1;
 
-    // months equal → compare days
     if (a.day < b.day) return -1;
     if (a.day > b.day) return 1;
 
-    // exactly the same date
     return 0;
-}   //used in activeLoansInRange
+}
 
 int ActiveLoansInRange(CustomerList* customers, const date& startD, const date& endD) {
     if (customers->head == nullptr) {
@@ -112,7 +109,6 @@ int ActiveLoansInRange(CustomerList* customers, const date& startD, const date& 
             if (L.Loan_Status == "active" || L.Loan_Status == "Active") {
                 bool startsBeforeRangeEnds =compareDates(L.Start_Date, endD) <= 0;
                 bool endsAfterRangeStarts =compareDates(L.End_Date, startD) >= 0;
-                // If loan overlaps the user range
                 if (startsBeforeRangeEnds && endsAfterRangeStarts) countLoans++;
             }
             current2 = current2->next;
