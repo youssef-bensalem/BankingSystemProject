@@ -1,5 +1,3 @@
-class CompletedLoanList;
-
 #include "core/Customer.h"
 #include "core/Employee.h"
 #include "core/LoanRequest.h"
